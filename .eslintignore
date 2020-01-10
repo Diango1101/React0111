@@ -1,0 +1,5 @@
+# ESLint ignore
+
+build
+public
+node_modules
