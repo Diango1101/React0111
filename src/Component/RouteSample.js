@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Link, Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../store/user.redux'
@@ -91,10 +91,12 @@ const Login = connect(
     (state) => ({
         isLogin: state.user.isLogin,
         loading: state.user.loading,
+        error: state.user.error,
     }),
     { login }
-)(function Login({ location, isLogin, login, loading }) {
+)(function Login({ location, isLogin, login, loading, error }) {
     const redirect = location.state.redirect || '/'
+    const [uname, setUname] = useState('')
     console.log('重定向', redirect)
 
     if (isLogin) {
@@ -106,7 +108,20 @@ const Login = connect(
             <div>
                 <p>User Login</p>
                 <br />
-                <button onClick={login} disabled={loading}>
+                {/* 显示错误信息 */}
+                {error && <p>{error}</p>}
+                {/* 输入用户名 */}
+                <input
+                    type="text"
+                    onChange={(e) => setUname(e.target.value)}
+                    value={uname}
+                />
+                <button
+                    onClick={() => {
+                        login(uname)
+                    }}
+                    disabled={loading}
+                >
                     {loading ? '登陆中....' : '登录'}
                 </button>
             </div>
